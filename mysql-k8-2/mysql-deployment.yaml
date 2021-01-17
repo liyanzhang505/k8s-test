@@ -1,0 +1,51 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: mysql-deployment
+spec:
+  selector:
+    matchLabels:
+      app: test-mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: test-mysql
+    spec:
+      containers:
+      - image: mysql:5.6
+        name: test-mysql
+        imagePullPolicy: IfNotPresent
+        env:
+          # Use secret in real usage
+        - name: MYSQL_ROOT_PASSWORD
+          value: qiusuo
+        - name: MYSQL_DATABASE
+          value: qiusuo
+        - name: MYSQL_USER
+          value: qiusuo
+        - name: MYSQL_PASSWORD
+          value: qiusuo
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-svc
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: test-mysql
+  clusterIP: None
