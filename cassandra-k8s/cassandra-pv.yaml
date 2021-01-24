@@ -1,0 +1,41 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-storage-cassandra
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: cassandra-pv-data
+  labels:
+    pv: cassandra-pv-data
+spec:
+  storageClassName: local-storage-cassandra
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: "/qiusuo-data/cassandra/data"
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: cassandra-pv-conf
+  labels:
+    pv: cassandra-pv-conf
+spec:
+  storageClassName: local-storage-cassandra
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: "/qiusuo-data/cassandra/conf"

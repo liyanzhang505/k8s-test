@@ -5,7 +5,10 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: local-storage
+  storageClassName: local-storage-mysql
   resources:
     requests:
       storage: 1Gi
+  selector:
+    matchLabels:
+      pv: mysql-pv

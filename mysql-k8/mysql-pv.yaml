@@ -1,7 +1,7 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: local-storage
+  name: local-storage-mysql
 provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: WaitForFirstConsumer
 
@@ -9,24 +9,16 @@ volumeBindingMode: WaitForFirstConsumer
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: local-storage
+  name: mysql-pv-volume
   labels:
-    type: local
+    pv: mysql-pv
 spec:
+  storageClassName: local-storage-mysql
   capacity:
-    storage: 2Gi
+    storage: 1Gi
+  volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  volumeMode: Filesystem
-  storageClassName: local-storage
-  local:
-    path: /qiusuo-data/mysql-1
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-          - key: kubernetes.io/hostname
-            operator: In
-            values:
-              - minikube
+  hostPath:
+    path: "/qiusuo-data/mysql/data"

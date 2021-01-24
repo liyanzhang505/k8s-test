@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: rocketmq-pod
+  labels:
+    app: roketmq-stomp
+spec:
+  containers:
+  - name: rocketmq-stomp
+    image: rocketmq-stomp:v1
+    ports:
+    - containerPort: 5672
+    - containerPort: 15672
+    - containerPort: 61613
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: rocketmq-service
+spec:
+  ports:
+    - name: 5672-5672
+      port: 5672
+      protocol: TCP
+      targetPort: 5672
+    - name: 15672-15672
+      port: 15672
+      protocol: TCP
+      targetPort: 15672
+    - name: 61613-61613
+      port: 61613
+      protocol: TCP
+      targetPort: 61613
+  type: ClusterIP
+  selector:
+    app: roketmq-stomp
+
+
