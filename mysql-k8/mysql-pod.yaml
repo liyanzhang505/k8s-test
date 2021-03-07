@@ -6,7 +6,7 @@ metadata:
     app: test-mysql
 spec:
   containers:
-    - image: mysql:5.7
+    - image: mysql:8.0
       name: test-mysql
       imagePullPolicy: IfNotPresent
       env:
